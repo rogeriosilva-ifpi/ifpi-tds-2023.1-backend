@@ -1,0 +1,33 @@
+body{
+    background: lightseagreen;
+    font-family: monospace;
+}
+
+#form-filme{
+    max-width: 20rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+#list-filme{
+    list-style: none;
+}
+
+#list-filme li{
+    font-size: 1rem;
+}
+
+main{
+    border: 1px solid green;
+    border-radius: 1rem;
+    padding-left: 3rem;
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 2rem;
+}
+
+#form-buttons{
+    display: flex;
+    justify-content: space-between;
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="estilo.css" />
+    <script defer src="comportamento.js"></script>
+    <title>App Filmes</title>
+  </head>
+  <body>
+    <main>
+      <h1>App Filmes</h1>
+      <h2>Novo Filme</h2>
+      <form id="form-filme" action="#">
+        <input
+          type="text"
+          autocomplete="off"
+          id="nome"
+          placeholder="Nome do Filme"
+        />
+        <input type="text" id="genero" placeholder="Gênero do Filme" />
+        <input type="number" id="ano" placeholder="Ano do Filme" />
+        <input type="number" id="duracao" placeholder="Duração(min)" />
+        <div id="form-buttons">
+          <input id="btn-cancelar" type="reset" value="Cancelar" />
+          <input id="btn-confirmar" type="submit" value="Adicionar Filme" />
+        </div>
+      </form>
+
+      <h2>Filmes Cadastrados</h2>
+
+      <ul id="list-filme"></ul>
+    </main>
+  </body>
+</html>
