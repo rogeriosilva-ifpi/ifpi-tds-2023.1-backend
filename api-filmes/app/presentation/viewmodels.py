@@ -7,3 +7,10 @@ class Filme(BaseModel):
     genero: str
     ano: int
     duracao: int
+
+
+class User(BaseModel):
+    id: int | None
+    nome: str
+    email: str
+    senha: str
