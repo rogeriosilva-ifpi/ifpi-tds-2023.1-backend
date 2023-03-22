@@ -1,4 +1,4 @@
-class FilmeRepository():
+class FilmeInMemoryRepository():
 
     def __init__(self):
         self.filmes = []

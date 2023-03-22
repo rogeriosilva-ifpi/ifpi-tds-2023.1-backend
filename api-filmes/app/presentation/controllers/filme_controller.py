@@ -1,25 +1,26 @@
 from fastapi import APIRouter, HTTPException, status
 
 from app.persistence.filme_mongodb_repository import FilmeMongoDBRepository
-from app.persistence.filme_repository import FilmeRepository
+from app.persistence.filme_repository import FilmeInMemoryRepository
 
 from ..viewmodels import Filme
 
+print('Filme Controller ✅')
 routes = APIRouter()
 prefix = '/filmes'
 
 # Banco de Dados
-# filme_repository = FilmeRepository()
+# filme_repository = FilmeInMemoryRepository()
 filme_repository = FilmeMongoDBRepository()
 
 
 @routes.get('/')
-def todos_filmes(skip: int | None = None, take: int | None = None):
+def todos_filmes(skip: int | None = 0, take: int | None = 0):
     return filme_repository.todos(skip, take)
 
 
 @routes.get('/{filme_id}')
-def obter_filme(filme_id: int):
+def obter_filme(filme_id: int | str):
     filme = filme_repository.obter_um(filme_id)
 
     # fail fast
@@ -36,7 +37,7 @@ def novo_filme(filme: Filme):
 
 
 @routes.delete("/{filme_id}", status_code=status.HTTP_204_NO_CONTENT)
-def remover_filme(filme_id: int):
+def remover_filme(filme_id: int | str):
     filme = filme_repository.obter_um(filme_id)
 
     if not filme:
@@ -47,7 +48,7 @@ def remover_filme(filme_id: int):
 
 
 @routes.put('/{filme_id}')
-def atualizar_filme(filme_id: int, filme: Filme):
+def atualizar_filme(filme_id: int | str, filme: Filme):
     filme_encontrado = filme_repository.obter_um(filme_id)
 
     if not filme_encontrado:
