@@ -19,13 +19,14 @@ class FilmeMongoDBRepository():
     def __init__(self):
         # Connect to MongoDB
         # uri = 'mongodb://localhost:27017'
-        uri = 'mongodb+srv://rogeriosilva:gB8KcjoiVMiL73mI@cluster0.v3apzvv.mongodb.net/?retryWrites=true&w=majority'
+        uri = 'mongodb://mongodb_bitnami:27017'
+        # uri = 'mongodb+srv://rogeriosilva:gB8KcjoiVMiL73mI@cluster0.v3apzvv.mongodb.net/?retryWrites=true&w=majority'
         client = MongoClient(uri)
         db = client['filmesapp']
         self.filmes = db['filmes']
         try:
             # print('Info MongoDB Server: ', client.server_info())
-            print('MongoDB 💖')
+            print('MongoDB 💖✅')
         except Exception:
             print('Deu erro!')
 
