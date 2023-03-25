@@ -1,4 +1,4 @@
-const baseURL = 'http://127.0.0.1:8000/filmes'
+const baseURL = 'https://app-filmes-tds-366-2023-1.onrender.com/filmes'
 
 let filmes = []
 let editing = false
