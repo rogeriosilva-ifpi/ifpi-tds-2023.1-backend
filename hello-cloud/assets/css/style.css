@@ -4,7 +4,12 @@
     box-sizing: border-box;
 }
 
+input, button{
+    font-size: 1.5rem;
+}
+
 body{
+    font-size: 2rem;
     font-family: 'Montserrat Alternates', Helvetica, sans-serif;
     color: white;
     background: #0F2027;  /* fallback for old browsers */
@@ -21,7 +26,7 @@ main{
     align-items: center;
     gap: 1rem;
 
-    padding-top: 3rem;
+    padding-top: 6rem;
 }
 
 main #logo{
@@ -32,4 +37,8 @@ main #logo{
 
 main #logo:hover{
     transform: scale(1.5) rotate(360deg);
+}
+
+main p{
+    font-size: 0.7rem;
 }
