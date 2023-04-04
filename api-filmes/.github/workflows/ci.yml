@@ -1,6 +1,16 @@
-name: Python package
+name: Python CI
 
-on: [push]
+on:
+  push:
+    branch:
+      - ci
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Python CI"
+        required: true
 
 jobs:
   build:
