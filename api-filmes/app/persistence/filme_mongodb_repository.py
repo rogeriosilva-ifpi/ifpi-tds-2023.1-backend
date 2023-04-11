@@ -27,7 +27,7 @@ class FilmeMongoDBRepository():
 
         try:
             # print('Info MongoDB Server: ', client.server_info())
-            print('MongoDB 💖')
+            print('MongoDB Filmes 💖')
         except Exception:
             print('Deu erro!')
 

@@ -1,5 +1,5 @@
 from bson.objectid import ObjectId
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, Field
 
 
 class Filme(BaseModel):
@@ -30,8 +30,21 @@ class Filme(BaseModel):
         }
 
 
-class User(BaseModel):
+class Usuario(BaseModel):
     id: int | None
-    nome: str
-    email: str
-    senha: str
+    nome: str = Field(min_length=3)
+    usuario: str = Field(min_length=5)
+    email: EmailStr
+    senha: str = Field(min_length=6, max_length=10)
+
+    def toDict(self):
+        return {
+            "nome": self.nome,
+            "usuario": self.usuario,
+            "email": self.email,
+            "senha": self.senha,
+        }
+
+
+class CriarUsuario(Usuario):
+    confirmacao_senha: str
