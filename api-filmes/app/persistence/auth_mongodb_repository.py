@@ -1,6 +1,8 @@
 from decouple import config
 from pymongo import MongoClient
 
+from ..presentation.viewmodels import Usuario
+
 
 class AuthMongoDBRepository():
 
@@ -28,4 +30,4 @@ class AuthMongoDBRepository():
     def obter_usuario_por_usuario(self, usuario):
         filtro = {'usuario': usuario}
         usuario = self.usuarios.find_one(filter=filtro)
-        return usuario
+        return Usuario.fromDict(usuario) if usuario else None

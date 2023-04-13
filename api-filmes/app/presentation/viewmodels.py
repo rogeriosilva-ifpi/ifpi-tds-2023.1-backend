@@ -30,12 +30,11 @@ class Filme(BaseModel):
         }
 
 
-class Usuario(BaseModel):
-    id: int | None
+class UsuarioSimples(BaseModel):
+    id: int | None | str
     nome: str = Field(min_length=3)
     usuario: str = Field(min_length=5)
     email: EmailStr
-    senha: str = Field(min_length=6, max_length=10)
 
     def toDict(self):
         return {
@@ -46,5 +45,18 @@ class Usuario(BaseModel):
         }
 
 
+class Usuario(UsuarioSimples):
+    senha: str = Field(min_length=6)
+
+    @classmethod
+    def fromDict(cls, usuario_dict):
+        return Usuario(**usuario_dict)
+
+
 class CriarUsuario(Usuario):
     confirmacao_senha: str
+
+
+class LoginData(BaseModel):
+    usuario: str = Field(min_length=5)
+    senha: str = Field(min_length=6)
