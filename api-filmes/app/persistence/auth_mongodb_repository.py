@@ -1,3 +1,4 @@
+from bson.objectid import ObjectId
 from decouple import config
 from pymongo import MongoClient
 
@@ -22,10 +23,15 @@ class AuthMongoDBRepository():
         usuario.id = str(_id)
         return usuario
 
+    def obter_usuario_por_id(self, id):
+        filtro = {'_id': ObjectId(id)}
+        usuario = self.usuarios.find_one(filter=filtro)
+        return Usuario.fromDict(usuario) if usuario else None
+
     def obter_usuario_por_email(self, email):
         filtro = {'email': email}
         usuario = self.usuarios.find_one(filter=filtro)
-        return usuario
+        return Usuario.fromDict(usuario) if usuario else None
 
     def obter_usuario_por_usuario(self, usuario):
         filtro = {'usuario': usuario}

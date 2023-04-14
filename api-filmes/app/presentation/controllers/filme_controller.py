@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.persistence.filme_mongodb_repository import FilmeMongoDBRepository
 from app.persistence.filme_repository import FilmeInMemoryRepository
 
-from ..viewmodels import Filme
+from ..auth_utils import obter_usuario_logado
+from ..viewmodels import Filme, UsuarioSimples
 
 print('Filme Controller ✅')
 routes = APIRouter()
@@ -15,7 +16,10 @@ filme_repository = FilmeMongoDBRepository()
 
 
 @routes.get('/')
-def todos_filmes(skip: int | None = 0, take: int | None = 0):
+def todos_filmes(
+        skip: int | None = 0,
+        take: int | None = 0,
+        usuario: UsuarioSimples = Depends(obter_usuario_logado)):
     return filme_repository.todos(skip, take)
 
 
@@ -32,7 +36,7 @@ def obter_filme(filme_id: int | str):
 
 
 @routes.post('/', status_code=status.HTTP_201_CREATED)
-def novo_filme(filme: Filme):
+def novo_filme(filme: Filme, usuario: UsuarioSimples = Depends(obter_usuario_logado)):
     return filme_repository.salvar(filme)
 
 

@@ -1,10 +1,13 @@
-import bcrypt
-from fastapi import APIRouter, HTTPException, status
+from typing import Annotated
 
+from fastapi import APIRouter, Depends, HTTPException, status
+
+from app.application.user_service import UsuarioService
 from app.infrastructure.cryptograph.hash_provider import HashProvider
 from app.infrastructure.cryptograph.jwt_token_provider import JWTTokenProvider
 from app.persistence.auth_mongodb_repository import AuthMongoDBRepository
 
+from ..auth_utils import obter_usuario_logado
 from ..viewmodels import CriarUsuario, LoginData, UsuarioSimples
 
 routes = APIRouter()
@@ -16,6 +19,11 @@ print('Auth Controller ✅')
 auth_repository = AuthMongoDBRepository()
 hash_provider = HashProvider()
 jwt_provider = JWTTokenProvider()
+
+
+@routes.post('/signup2', status_code=status.HTTP_201_CREATED, response_model=UsuarioSimples)
+def auth_signup2(usuario: CriarUsuario, usuario_service: UsuarioService = Depends(UsuarioService)):
+    return usuario_service.criar_usuario(usuario)
 
 
 @routes.post('/signup', status_code=status.HTTP_201_CREATED, response_model=UsuarioSimples)
@@ -67,12 +75,6 @@ def auth_signin(login_data: LoginData):
             detail='Usuário e/ou senha incorreto(s)!')
 
 
-@routes.get('/me')
-def auth_me():
-    # 1. Receber o JWT pelo Header (Authorization) da Request
-    # 1.1 Se não vier --> HttpException
-    # 1.2 Se vier --> verify(JWT) --> usuario_id
-    # 2. Buscar usuario pelo id (usuario_id)
-    # 2.1 Se encontrar --> TUDO BEM (retorno o usuário completo)
-    # 2.2 Se não encontrar --> HttpException
-    return 'Me'
+@routes.get('/me', response_model=UsuarioSimples)
+async def auth_me(user: UsuarioSimples = Depends(obter_usuario_logado)):
+    return user

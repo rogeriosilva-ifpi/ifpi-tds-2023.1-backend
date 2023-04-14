@@ -50,7 +50,7 @@ class Usuario(UsuarioSimples):
 
     @classmethod
     def fromDict(cls, usuario_dict):
-        return Usuario(**usuario_dict)
+        return Usuario(**usuario_dict, id=str(usuario_dict['_id']))
 
 
 class CriarUsuario(Usuario):

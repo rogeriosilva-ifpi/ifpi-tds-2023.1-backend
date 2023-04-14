@@ -11,5 +11,6 @@ class JWTTokenProvider():
         token = jwt.encode(payload, self.secret, algorithm="HS256")
         return token
 
-    def verify(self, token) -> str:
-        return 'payload'
+    def decode(self, token) -> dict:
+        payload = jwt.decode(token, self.secret, algorithms=["HS256"])
+        return payload
