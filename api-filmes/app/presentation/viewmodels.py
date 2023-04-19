@@ -8,6 +8,7 @@ class Filme(BaseModel):
     genero: str
     ano: int
     duracao: int
+    usuario_id: int | str | None
 
     class Config:
         orm_mode = True
@@ -18,7 +19,8 @@ class Filme(BaseModel):
                        nome=filme['nome'],
                        genero=filme['genero'],
                        duracao=filme['duracao'],
-                       ano=filme['ano'])
+                       ano=filme['ano'],
+                       usuario_id=str(filme['usuario_id']))
         return filme_
 
     def toDict(self):
@@ -26,7 +28,8 @@ class Filme(BaseModel):
             "nome": self.nome,
             "genero": self.genero,
             "duracao": self.duracao,
-            "ano": self.ano
+            "ano": self.ano,
+            "usuario_id": self.usuario_id
         }
 
 
