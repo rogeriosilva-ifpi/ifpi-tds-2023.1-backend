@@ -14,13 +14,13 @@ class Filme(BaseModel):
         orm_mode = True
 
     @classmethod
-    def fromDict(cls, filme):
-        filme_ = Filme(id=str(filme['_id']),
-                       nome=filme['nome'],
-                       genero=filme['genero'],
-                       duracao=filme['duracao'],
-                       ano=filme['ano'],
-                       usuario_id=str(filme['usuario_id']))
+    def fromDict(cls, filme_dict):
+        filme_ = Filme(id=str(filme_dict['_id']),
+                       nome=filme_dict['nome'],
+                       genero=filme_dict['genero'],
+                       duracao=filme_dict['duracao'],
+                       ano=filme_dict['ano'],
+                       usuario_id=str(filme_dict['usuario_id']))
         return filme_
 
     def toDict(self):

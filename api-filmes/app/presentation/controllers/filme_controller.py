@@ -72,8 +72,10 @@ def atualizar_filme(filme_id: int | str, filme: Filme, usuario: UsuarioSimples =
         raise HTTPException(status.HTTP_404_NOT_FOUND,
                             detail="Filme não encontrado")
 
-    if filme.usuario_id != usuario.id:
+    if filme_encontrado.usuario_id != usuario.id:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail="Filme não encontrado!")
+
+    filme.usuario_id = usuario.id
 
     return filme_repository.atualizar(filme_id, filme)

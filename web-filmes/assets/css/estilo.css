@@ -3,8 +3,8 @@ body{
     font-family: monospace;
 }
 
-#form-filme{
-    max-width: 20rem;
+form, #form-filme{
+    /* max-width: 20rem; */
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
@@ -22,9 +22,14 @@ main{
     border: 1px solid green;
     border-radius: 1rem;
     padding-left: 3rem;
+    padding-right: 3rem;
     width: 60%;
     margin: 0 auto;
     margin-top: 2rem;
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; */
 }
 
 #form-buttons{

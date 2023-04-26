@@ -4,6 +4,7 @@ const baseURL = "http://localhost:8000/filmes"
 let filmes = []
 let editing = false
 let filme_id
+const token = `Bearer ${localStorage.getItem("token_filmes")}`
 
 function resetar_formulario() {
   const form_filme = document.getElementById("form-filme")
@@ -59,9 +60,14 @@ function atualizar_tela() {
         return
       }
 
-      const response = await fetch(baseURL + "/" + filme.id, {
-        method: "DELETE"
-      })
+      const opcoes = {
+        method: "DELETE",
+        headers: {
+          Authorization: token
+        }
+      }
+
+      const response = await fetch(baseURL + "/" + filme.id, opcoes)
 
       // se deu certo..
       if (response.ok) {
@@ -92,11 +98,9 @@ function preencher_formulario(filme) {
 async function carregar_filmes() {
   console.log("API - Todos os filmes")
 
-  const token = localStorage.getItem("token_filmes")
-
   const opcoes = {
     headers: {
-      Authorization: `Bearer ${token}`
+      Authorization: token
     }
   }
   const response = await fetch(baseURL, opcoes)
@@ -159,7 +163,8 @@ function configurar_formulario() {
       method: method,
       body: JSON.stringify(filme),
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: token
       }
     }
 
@@ -170,15 +175,35 @@ function configurar_formulario() {
       carregar_filmes()
       resetar_formulario()
     } else {
-      alert(mensagem_erro)
+      const result_data = await response.json()
+      alert(`Erro: ${result_data["detail"]}`)
     }
   }
 }
 
 function app() {
   console.log("Hello Filmes")
+  show_current_user()
   configurar_formulario()
   carregar_filmes()
+}
+
+async function show_current_user() {
+  const url = "http://localhost:8000/auth/me"
+  const user_label = document.getElementById("user")
+
+  const opcoes = {
+    headers: {
+      Authorization: token
+    }
+  }
+  const response = await fetch(url, opcoes)
+
+  if (response.ok) {
+    const result_data = await response.json()
+    const primeiro_nome = result_data["nome"].split(" ")[0]
+    user_label.innerText = `Olá ${primeiro_nome}!`
+  }
 }
 
 function logout() {
