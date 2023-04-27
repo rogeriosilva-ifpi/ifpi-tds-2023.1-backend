@@ -8,7 +8,7 @@ from app.infrastructure.cryptograph.jwt_token_provider import JWTTokenProvider
 from app.persistence.auth_mongodb_repository import AuthMongoDBRepository
 
 from ..auth_utils import obter_usuario_logado
-from ..viewmodels import CriarUsuario, LoginData, UsuarioSimples
+from ..viewmodels import CriarUsuario, LoginData, Usuario
 
 routes = APIRouter()
 prefix = '/auth'
@@ -21,12 +21,12 @@ hash_provider = HashProvider()
 jwt_provider = JWTTokenProvider()
 
 
-@routes.post('/signup2', status_code=status.HTTP_201_CREATED, response_model=UsuarioSimples)
+@routes.post('/signup2', status_code=status.HTTP_201_CREATED, response_model=Usuario)
 def auth_signup2(usuario: CriarUsuario, usuario_service: UsuarioService = Depends(UsuarioService)):
     return usuario_service.criar_usuario(usuario)
 
 
-@routes.post('/signup', status_code=status.HTTP_201_CREATED, response_model=UsuarioSimples)
+@routes.post('/signup', status_code=status.HTTP_201_CREATED, response_model=Usuario)
 def auth_signup(usuario: CriarUsuario):
 
     if usuario.senha != usuario.confirmacao_senha:
@@ -75,6 +75,6 @@ def auth_signin(login_data: LoginData):
             detail='Usuário e/ou senha incorreto(s)!')
 
 
-@routes.get('/me', response_model=UsuarioSimples)
-async def auth_me(user: UsuarioSimples = Depends(obter_usuario_logado)):
+@routes.get('/me', response_model=Usuario)
+async def auth_me(user: Usuario = Depends(obter_usuario_logado)):
     return user

@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.persistence.filme_mongodb_repository import FilmeMongoDBRepository
-from app.persistence.filme_repository import FilmeInMemoryRepository
+# from app.persistence.filme_mongodb_repository import FilmeMongoDBRepository
+# from app.persistence.filme_repository import FilmeInMemoryRepository
+from app.persistence.filme_pgdb_repository import FilmePostgreSQLDBRepository
 
 from ..auth_utils import obter_usuario_logado
-from ..viewmodels import Filme, UsuarioSimples
+from ..viewmodels import Filme, Usuario
 
 print('Filme Controller ✅')
 routes = APIRouter()
@@ -12,22 +13,25 @@ prefix = '/filmes'
 
 # Banco de Dados
 # filme_repository = FilmeInMemoryRepository()
-filme_repository = FilmeMongoDBRepository()
+# filme_repository = FilmeMongoDBRepository()
+filme_repository = FilmePostgreSQLDBRepository()
 
 
 @routes.get('/')
 def todos_filmes(
         skip: int | None = 0,
         take: int | None = 0,
-        usuario: UsuarioSimples = Depends(obter_usuario_logado)):
-    filmes = filme_repository.todos(skip, take)
-    filmes_usuario = list(
-        filter(lambda filme: filme.usuario_id == usuario.id, filmes))
-    return filmes_usuario
+        # usuario: Usuario = Depends(obter_usuario_logado)
+):
+    # filmes = filme_repository.todos(skip, take)
+    # filmes_usuario = list(
+    #     filter(lambda filme: filme.usuario_id == usuario.id, filmes))
+    # return filmes_usuario
+    return filme_repository.todos(skip, take)
 
 
 @routes.get('/{filme_id}')
-def obter_filme(filme_id: int | str, usuario: UsuarioSimples = Depends(obter_usuario_logado)):
+def obter_filme(filme_id: int | str, usuario: Usuario = Depends(obter_usuario_logado)):
     filme = filme_repository.obter_um(filme_id)
 
     # fail fast
@@ -43,14 +47,16 @@ def obter_filme(filme_id: int | str, usuario: UsuarioSimples = Depends(obter_usu
 
 
 @routes.post('/', status_code=status.HTTP_201_CREATED)
-def novo_filme(filme: Filme, usuario: UsuarioSimples = Depends(obter_usuario_logado)):
-    filme.usuario_id = usuario.id
+def novo_filme(filme: Filme,
+               #    usuario: Usuario = Depends(obter_usuario_logado)
+               ):
+    # filme.usuario_id = usuario.id
     return filme_repository.salvar(filme)
 
 
 @routes.delete("/{filme_id}",
                status_code=status.HTTP_204_NO_CONTENT)
-def remover_filme(filme_id: int | str, usuario: UsuarioSimples = Depends(obter_usuario_logado)):
+def remover_filme(filme_id: int | str, usuario: Usuario = Depends(obter_usuario_logado)):
     filme = filme_repository.obter_um(filme_id)
 
     if not filme:
@@ -65,7 +71,7 @@ def remover_filme(filme_id: int | str, usuario: UsuarioSimples = Depends(obter_u
 
 
 @routes.put('/{filme_id}')
-def atualizar_filme(filme_id: int | str, filme: Filme, usuario: UsuarioSimples = Depends(obter_usuario_logado)):
+def atualizar_filme(filme_id: int | str, filme: Filme, usuario: Usuario = Depends(obter_usuario_logado)):
     filme_encontrado = filme_repository.obter_um(filme_id)
 
     if not filme_encontrado:

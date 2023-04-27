@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlmodel import SQLModel
 
+from app.persistence.db_utils import get_engine
+from app.persistence.filme_pgdb_repository import FilmePostgreSQLDBRepository
 from app.presentation.controllers import auth_controller, filme_controller
 from app.presentation.log_middleware import LogMiddleware
 
@@ -17,6 +20,15 @@ app.add_middleware(CORSMiddleware,
                    allow_headers=['*'])
 
 app.add_middleware(LogMiddleware)
+
+# SQL Model create db/table
+
+engine = get_engine()
+SQLModel.metadata.create_all(engine)
+
+# Teste
+repo = FilmePostgreSQLDBRepository()
+
 
 # Rotas e Controllers
 app.include_router(filme_controller.routes,

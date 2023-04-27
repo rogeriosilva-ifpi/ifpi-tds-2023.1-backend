@@ -1,17 +1,15 @@
 from bson.objectid import ObjectId
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr
+from sqlmodel import Field, SQLModel
 
 
-class Filme(BaseModel):
-    id: int | None | str
+class Filme(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
     nome: str
     genero: str
     ano: int
     duracao: int
-    usuario_id: int | str | None
-
-    class Config:
-        orm_mode = True
+    usuario_id: int | None = Field(default=None, foreign_key="usuario.id")
 
     @classmethod
     def fromDict(cls, filme_dict):
@@ -33,27 +31,12 @@ class Filme(BaseModel):
         }
 
 
-class UsuarioSimples(BaseModel):
-    id: int | None | str
+class Usuario(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
     nome: str = Field(min_length=3)
     usuario: str = Field(min_length=5)
     email: EmailStr
-
-    def toDict(self):
-        return {
-            "nome": self.nome,
-            "usuario": self.usuario,
-            "email": self.email,
-            "senha": self.senha,
-        }
-
-
-class Usuario(UsuarioSimples):
     senha: str = Field(min_length=6)
-
-    @classmethod
-    def fromDict(cls, usuario_dict):
-        return Usuario(**usuario_dict, id=str(usuario_dict['_id']))
 
 
 class CriarUsuario(Usuario):
