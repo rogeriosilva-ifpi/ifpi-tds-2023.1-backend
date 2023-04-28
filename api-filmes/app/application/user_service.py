@@ -2,12 +2,14 @@ from fastapi import Depends, HTTPException, status
 
 from app.infrastructure.cryptograph.hash_provider import HashProvider
 from app.persistence.auth_mongodb_repository import AuthMongoDBRepository
+from app.persistence.auth_pgdb_repository import AuthPostgreSQLRepository
 
 
 class UsuarioService():
 
     def __init__(self,
-                 auth_repository=Depends(AuthMongoDBRepository),
+                 #  auth_repository=Depends(AuthMongoDBRepository),
+                 auth_repository=Depends(AuthPostgreSQLRepository),
                  hash_provider=Depends(HashProvider)
                  ):
         self.auth_repository = auth_repository

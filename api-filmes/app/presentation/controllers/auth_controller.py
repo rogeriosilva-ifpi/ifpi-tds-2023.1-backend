@@ -6,9 +6,10 @@ from app.application.user_service import UsuarioService
 from app.infrastructure.cryptograph.hash_provider import HashProvider
 from app.infrastructure.cryptograph.jwt_token_provider import JWTTokenProvider
 from app.persistence.auth_mongodb_repository import AuthMongoDBRepository
+from app.persistence.auth_pgdb_repository import AuthPostgreSQLRepository
 
 from ..auth_utils import obter_usuario_logado
-from ..viewmodels import CriarUsuario, LoginData, UsuarioSimples
+from ..viewmodels import CriarUsuario, LoginData, Usuario, UsuarioSimples
 
 routes = APIRouter()
 prefix = '/auth'
@@ -16,7 +17,8 @@ prefix = '/auth'
 print('Auth Controller ✅')
 
 # Dependencias
-auth_repository = AuthMongoDBRepository()
+# auth_repository = AuthMongoDBRepository()
+auth_repository = AuthPostgreSQLRepository()
 hash_provider = HashProvider()
 jwt_provider = JWTTokenProvider()
 
@@ -52,7 +54,8 @@ def auth_signup(usuario: CriarUsuario):
     # Tudo OK
     usuario.senha = hash_provider.hash(usuario.senha)
 
-    usuario_criado = auth_repository.criar_usuario(usuario)
+    usuario_criado = auth_repository.criar_usuario(Usuario(
+        nome=usuario.nome, email=usuario.email, senha=usuario.senha, usuario=usuario.usuario))
 
     return usuario_criado
 

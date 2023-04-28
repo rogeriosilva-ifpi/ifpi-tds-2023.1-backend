@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.persistence.filme_mongodb_repository import FilmeMongoDBRepository
-from app.persistence.filme_repository import FilmeInMemoryRepository
+# from app.persistence.filme_repository import FilmeInMemoryRepository
+from app.persistence.filme_pgdb_repository import FilmePostgreSQLRepository
 
 from ..auth_utils import obter_usuario_logado
 from ..viewmodels import Filme, UsuarioSimples
@@ -12,14 +13,16 @@ prefix = '/filmes'
 
 # Banco de Dados
 # filme_repository = FilmeInMemoryRepository()
-filme_repository = FilmeMongoDBRepository()
+# filme_repository = FilmeMongoDBRepository()
+filme_repository = FilmePostgreSQLRepository()
 
 
 @routes.get('/')
 def todos_filmes(
         skip: int | None = 0,
         take: int | None = 0,
-        usuario: UsuarioSimples = Depends(obter_usuario_logado)):
+        usuario: UsuarioSimples = Depends(obter_usuario_logado)
+):
     filmes = filme_repository.todos(skip, take)
     filmes_usuario = list(
         filter(lambda filme: filme.usuario_id == usuario.id, filmes))
@@ -43,7 +46,9 @@ def obter_filme(filme_id: int | str, usuario: UsuarioSimples = Depends(obter_usu
 
 
 @routes.post('/', status_code=status.HTTP_201_CREATED)
-def novo_filme(filme: Filme, usuario: UsuarioSimples = Depends(obter_usuario_logado)):
+def novo_filme(filme: Filme,
+               usuario: UsuarioSimples = Depends(obter_usuario_logado)
+               ):
     filme.usuario_id = usuario.id
     return filme_repository.salvar(filme)
 
