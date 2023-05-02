@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
+# from app.persistence.db_utils import obter_repository
 from app.persistence.filme_mongodb_repository import FilmeMongoDBRepository
 # from app.persistence.filme_repository import FilmeInMemoryRepository
 from app.persistence.filme_pgdb_repository import FilmePostgreSQLRepository
@@ -15,6 +16,7 @@ prefix = '/filmes'
 # filme_repository = FilmeInMemoryRepository()
 # filme_repository = FilmeMongoDBRepository()
 filme_repository = FilmePostgreSQLRepository()
+# filme_repository = Depends(obter_repository('filme'))
 
 
 @routes.get('/')

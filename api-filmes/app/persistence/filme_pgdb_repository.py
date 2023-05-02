@@ -1,3 +1,6 @@
+from typing import Annotated, Any
+
+from fastapi import Depends
 from sqlmodel import Session, select
 
 from app.persistence.db_utils import obter_engine
