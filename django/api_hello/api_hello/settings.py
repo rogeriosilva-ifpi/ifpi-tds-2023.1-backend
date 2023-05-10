@@ -22,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=(lb42x)9#g+46h)fgh-4^3^2bpy$%sio$brr3m*4_a+=!f3=q'
+SECRET_KEY = 'django-insecure-j#su)-a(@c*dqgqrb9-lqc#n8))^r^d8ax=pj&2j9&o)o!tc39'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(config('DEBUG'))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [*config('ALLOWED_HOSTS').split(';')]
 
 
 # Application definition
@@ -39,9 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    # DRF
     'rest_framework',
-    'api'
+
+    # Simple JWT
+    'rest_framework_simplejwt',
+
+    # Hello API
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -79,20 +84,17 @@ WSGI_APPLICATION = 'api_hello.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT'),
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD')
-    }
-}
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": config('DB_HOST'),
+        "PORT": config('DB_PORT'),
+        "NAME": config('DB_NAME'),
+        "USER": config('DB_USER'),
+        "PASSWORD": config('DB_PASSWORD'),
+        "TEST": {
+            "NAME": config('DB_TEST_NAME'),
+        },
+    },
 }
 
 
@@ -113,6 +115,13 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# Django REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
 
 
 # Internationalization
