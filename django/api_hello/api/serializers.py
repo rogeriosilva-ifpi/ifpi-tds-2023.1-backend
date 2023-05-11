@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
+from rest_framework.validators import ValidationError
 
 from api.models import Filme
 
@@ -31,3 +32,8 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+    # def validade_email(self, value):
+    #     if User.objects.filter(email=value).exists():
+    #         raise ValidationError('Email já utilizado!')
+    #     return value
