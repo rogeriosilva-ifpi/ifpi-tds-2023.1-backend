@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'catalogo',
 
     # libs
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
