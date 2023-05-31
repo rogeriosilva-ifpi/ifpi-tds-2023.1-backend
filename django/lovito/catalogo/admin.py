@@ -10,10 +10,47 @@ class CategoriaAdmin(admin.ModelAdmin):
     list_display = ['nome', 'criado_em', 'atualizado_em']
 
 
+class CategoriaProdutoInline(admin.TabularInline):
+    model = CategoriaProduto
+    # max_num = 2
+    extra = 1
+    classes = ('grp-collapse grp-closed',)
+
+
 @admin.register(Produto)
 class ProdutoAdmin(admin.ModelAdmin):
 
-    list_display = ['nome', 'descricao', 'preco']
+    fieldsets = [
+        ('Dados Básicos',
+         {
+             'fields': ['nome', 'descricao']
+         }
+         ),
+        ('Ativação',
+         {
+             'classes': ('grp-collapse grp-closed',),
+             'fields': ['ativo']
+         }),
+        ('Precificação',
+         {
+             'classes': ('grp-collapse grp-open',),
+             'fields': ['preco']
+         }),
+        ('Classe do Produto',
+         {
+             'classes': ('grp-collapse grp-open',),
+             'fields': ['classe'],
+             'description': 'Cada produto pertence apenas a uma classe'
+         })
+    ]
+
+    list_display = ['nome', 'ativo', 'descricao',
+                    'preco', 'classe']
+    list_filter = ['ativo', 'classe']
+
+    search_fields = ['nome', 'descricao']
+
+    inlines = [CategoriaProdutoInline]
 
 
 @admin.register(CategoriaProduto)
