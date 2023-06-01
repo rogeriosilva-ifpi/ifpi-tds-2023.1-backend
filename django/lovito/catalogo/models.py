@@ -29,7 +29,7 @@ class ClasseProduto(AbstractBaseModel):
     def __str__(self):
         return self.nome
 
-    # autocomplete do admin
+    # Grappelli: Autocomplete do admin
     @staticmethod
     def autocomplete_search_fields():
         return ('id__iexact', 'nome__icontains')
@@ -41,9 +41,12 @@ class Produto(AbstractBaseModel):
     descricao = models.TextField(
         verbose_name='Descrição', null=False, blank=False, max_length=255)
     preco = models.DecimalField(
-        max_digits=8, decimal_places=2, help_text='em R$')
+        max_digits=8, decimal_places=2, help_text='em R$',)
     ativo = models.BooleanField(
         verbose_name='Ativo?', default=True, help_text='Só é possível vender produtos ativos')
+
+    class Meta:
+        verbose_name_plural = 'Produtos'
 
     # relacionamentos
     classe = models.ForeignKey(
@@ -51,6 +54,14 @@ class Produto(AbstractBaseModel):
 
     def __str__(self):
         return self.nome
+
+    # @admin.display(description='Categorias')
+    def nomes_categorias(self):
+        categorias = self.categorias.all()
+        nomes_categorias = [c.categoria.nome for c in categorias]
+        return ', '.join(nomes_categorias) if len(categorias) > 0 else 7 * '-'
+
+    nomes_categorias.short_description = 'Categorias'
 
 
 class CategoriaProduto(AbstractBaseModel):
